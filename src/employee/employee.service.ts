@@ -12,6 +12,7 @@ export class EmployeeService{
 
 
  async createEmployee(dto: CreateEmployeeDto) {
+
     try {
         const user = await this.prisma.employee.create({
             data: {
