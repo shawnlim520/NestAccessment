@@ -11,5 +11,16 @@ services:
       POSTGRES_INITDB_ARGS: '--encoding=UTF-8'
     networks:
       - firstnest
+  test-db:
+    image: postgres:13
+    ports:
+      - 5435:5432
+    environment:
+      POSTGRES_US: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRED_DB: nest
+      POSTGRES_INITDB_ARGS: '--encoding=UTF-8'
+    networks:
+      - firstnest
 networks:
   firstnest:

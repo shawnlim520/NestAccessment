@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
-import { PrismaService } from "src/prisma/prisma.service";
+import { PrismaService } from "../prisma/prisma.service";
 import { CreateEmployeeDto, EditEmployeeDto } from "./dto";
 
 @Injectable()
@@ -14,14 +14,14 @@ export class EmployeeService{
  async createEmployee(dto: CreateEmployeeDto) {
 
     try {
-        const user = await this.prisma.employee.create({
+        const employee = await this.prisma.employee.create({
             data: {
                 username:dto.username,
                 fullname:dto.fullname,
                 salary:dto.salary,
             }
         })
-        return user; 
+        return employee; 
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
             if (error.code === 'P2002') {
@@ -34,48 +34,56 @@ export class EmployeeService{
 
 
 async getEmployeeById(userId:number) {
-    const user = await this.prisma.employee.findUnique({
+    const employee = await this.prisma.employee.findUnique({
         where: {
             id: userId
         }
     })
 
-    return user;
+    return employee;
 }
 
 
 async editEmployeeById(userId:number, dto: EditEmployeeDto) {
-  try {
-    const user = await this.prisma.employee.update({
+
+    const employee = await this.prisma.employee.findUnique({
       where: {
           id: userId
       },
-      data: {
-          username:dto.username,
-          fullname:dto.fullname,
-          salary:dto.salary,
-      }
   })
+    if (!employee || employee.id !== userId) {
+        throw new ForbiddenException('Access to resourcess denied');
+    }
 
-  return user;
-  } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
-      if (error.code === 'P2002') {
-          throw new ForbiddenException('Username Taken');
-      }
-  }
-  }
-
+    return this.prisma.employee.update({
+        where: {
+            id: userId
+        },
+        data: {
+            username:dto.username,
+            fullname:dto.fullname,
+            salary:dto.salary,
+        }
+    })
 }
 
 
 async deleteEmployeeById(userId:number) {
-    const user = await this.prisma.employee.delete({
+    const employee = await this.prisma.employee.findUnique({
         where: {
             id:userId
         }
     })
 
-    return user;
+    if (!employee || employee.id !== userId) {
+        throw new ForbiddenException('Access to resourcess denied');
+    }
+
+    return this.prisma.employee.delete({
+        where: {
+            id:userId
+        }
+    })
+
 }
 }
