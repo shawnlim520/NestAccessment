@@ -25,7 +25,7 @@ export class EmployeeService{
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
             if (error.code === 'P2002') {
-                throw new ForbiddenException('Credentials taken');
+                throw new ForbiddenException('Username Taken');
             }
         }
     }
@@ -45,18 +45,27 @@ async getEmployeeById(userId:number) {
 
 
 async editEmployeeById(userId:number, dto: EditEmployeeDto) {
+  try {
     const user = await this.prisma.employee.update({
-        where: {
-            id: userId
-        },
-        data: {
-            username:dto.username,
-            fullname:dto.fullname,
-            salary:dto.salary,
-        }
-    })
+      where: {
+          id: userId
+      },
+      data: {
+          username:dto.username,
+          fullname:dto.fullname,
+          salary:dto.salary,
+      }
+  })
 
-    return user;
+  return user;
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+          throw new ForbiddenException('Username Taken');
+      }
+  }
+  }
+
 }
 
 
