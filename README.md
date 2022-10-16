@@ -1,35 +1,27 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Nest Assessment (API Service)
 
 ## Installation
 
+To set up the project locally, please run below command to install all the dependancies.
 ```bash
 $ npm install
+```
+## Set up database
+
+Make sure docker is install in your pc, and port 5434 and 5435 are not being used. </br>
+Port 5434 is used for development</br>
+Port 5455 is used for jest testing</br>
+
+Run below command to set up database, in this accessment, I'm using Postgres database.
+```bash
+# Development
+$ npm run db:dev:restart
+
+# Jest Test
+$ npm run db:test:restart
 ```
 
 ## Running the app
@@ -44,30 +36,155 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+After the app is running, kindy use Postman or any other API testing software to begin. </br>
+ 
+API Endpoints </br>
 
-## Test
+1. Create New Employee </br>
+Endpoint: http://localhost:3000/employees </br>
+Method: POST </br>
+Body: </br>
+username (string) </br>
+fullname (string) </br>
+salary (float), maximum 2 decimal places </br>
+
+Sample create employee request body in JSON format: </br>
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+{
+  "id": "1",
+  "username": "hpotter",
+  "fullname": "Harry Potter"
+  "salary": 1234.56
+}
+```
+Sample response: </br>
+```bash
+{
+    "id": 1,
+    "createdAt": "2022-10-16T08:34:57.154Z",
+    "updatedAt": "2022-10-16T08:34:57.154Z",
+    "username": "hpotter",
+    "fullname": "Harry Potter",
+    "salary": 1234.56
+}
 ```
 
+2. Get All Employees </br>
+Endpoint: http://localhost:3000/employees </br>
+Method: GET </br>
+
+Sample response </br>
+```bash
+[
+    {
+        "id": 1,
+        "createdAt": "2022-10-16T08:34:57.154Z",
+        "updatedAt": "2022-10-16T08:34:57.154Z",
+        "username": "hpotter",
+        "fullname": "Harry Potter",
+        "salary": 1234.56
+    }
+]
+```
+3. Get Employee By Id </br>
+Endpoint: http://localhost:3000/employees/{id} </br>
+Method: GET </br>
+
+Sample response </br>
+```bash
+{
+    "id": 1,
+    "createdAt": "2022-10-16T08:34:57.154Z",
+    "updatedAt": "2022-10-16T08:34:57.154Z",
+    "username": "hpotter",
+    "fullname": "Harry Potter",
+    "salary": 1234.56
+}
+```
+
+4. Edit Employee By Id </br>
+Endpoint: http://localhost:3000/employees/{id} </br>
+Method: PATCH </br>
+Body: </br>
+username (string) </br>
+fullname (string) </br>
+salary (float), maximum 2 decimal places </br>
+
+Sample edit employee request body in JSON format: </br>
+
+```bash
+{
+  "fullname": "Harry Potter 2"
+  "salary": 4321.45
+}
+```
+Sample response </br>
+```bash
+{
+    "id": 1,
+    "createdAt": "2022-10-16T08:34:57.154Z",
+    "updatedAt": "2022-10-16T08:42:17.419Z",
+    "username": "hpotter",
+    "fullname": "Harry Potter 2",
+    "salary": 4321.45
+}
+```
+
+5. Delete Employee By Id </br>
+Endpoint: http://localhost:3000/employees/{id} </br>
+Method: DELETE </br>
+
+Sample response </br>
+```bash
+{
+    "id": 1,
+    "createdAt": "2022-10-16T08:34:57.154Z",
+    "updatedAt": "2022-10-16T08:42:17.419Z",
+    "username": "hpotter",
+    "fullname": "Harry Potter 2",
+    "salary": 4321.45
+}
+```
+
+## Run Jest Test
+
+```bash
+# e2e tests
+$ npm run test:e2e
+```
+Sample test output: </br>
+```bash
+  App e2e                                                                                                                                                     
+    Employee                                                                                                                                                  
+      Get Employees                                                                                                                                           
+        √ should get employees (59 ms)                                                                                                                        
+      Add Employees                                                                                                                                           
+        √ Add new employee (49 ms)                                                                                                                            
+        √ if username taken (41 ms)                                                                                                                           
+        √ if empty username (21 ms)                                                                                                                           
+        √ if empty fullname (47 ms)                                                                                                                           
+        √ if empty salary (21 ms)                                                                                                                             
+        √ if salary not number (17 ms)                                                                                                                        
+      Edit Employees                                                                                                                                          
+        √ update employee fullname (28 ms)                                                                                                                    
+        √ update invalid employee (16 ms)                                                                                                                     
+        √ update salary not number (18 ms)                                                                                                                    
+      Delete Employees                                                                                                                                        
+        √ delete employee by id (23 ms)                                                                                                                       
+        √ delete employee by invalid id (16 ms)                                                                                                               
+                                                                                                                                                              
+Test Suites: 1 passed, 1 total                                                                                                                                
+Tests:       12 passed, 12 total                                                                                                                              
+Snapshots:   0 total
+Time:        3.012 s
+Ran all test suites.
+```
 ## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Email: limlipxuan1995@gmail.com </br>
+Contact: 0168578939
 
-## Stay in touch
+## Author
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+Lim Lip Xuan (Shawn)
