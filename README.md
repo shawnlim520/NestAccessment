@@ -23,7 +23,14 @@ $ npm run db:dev:restart
 # Jest Test
 $ npm run db:test:restart
 ```
+To view database using Prisma, run following command
+```bash
+# Development
+$ npx prisma studio
 
+# Jest Test
+$ npx dotenv -e .env.test -- prisma studio
+```
 ## Running the app
 
 ```bash
@@ -148,7 +155,8 @@ Sample response </br>
 ```
 
 ## Run Jest Test
-
+ Make sure to terminate the running app before run Jest test </br>
+ 
 ```bash
 # e2e tests
 $ npm run test:e2e
