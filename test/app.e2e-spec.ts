@@ -49,12 +49,31 @@ describe('App e2e', () => {
         })
     });
     describe('Add Employees', () => {
+      it('Add new employee', () => {
+        return pactum
+        .spec()
+        .post('/employees',
+        )
+        .withBody({
+          'username' : result,
+          'fullname' : dto.fullname,
+          'salary'   : dto.salary
+        })
+        .expectStatus(201)
+        .stores('employeeId','id')
+        .stores('username','username')
+        .inspect()
+      });
       it('if username taken', () => {
         return pactum
         .spec()
         .post('/employees',
         )
-        .withBody(dto)
+        .withBody({
+          'username' : '$S{username}',
+          'fullname' : dto.fullname,
+          'salary'   : dto.salary
+        })
         .expectStatus(403)
         .inspect()
       });
@@ -107,20 +126,7 @@ describe('App e2e', () => {
         .expectStatus(400)
         .inspect()
       });
-      it('Add new employee', () => {
-        return pactum
-        .spec()
-        .post('/employees',
-        )
-        .withBody({
-          'username' : result,
-          'fullname' : dto.fullname,
-          'salary'   : dto.salary
-        })
-        .expectStatus(201)
-        .stores('employeeId','id')
-        .inspect()
-      })
+
     });
 
     describe('Edit Employees', () => {
